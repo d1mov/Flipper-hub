@@ -61,6 +61,8 @@ if (badusb.isConnected()) {
 	badusb.println("Start-Process powershell -Verb runAs ; exit");
 	badusb.press('ENTER');
 	delay(4000);
+	badusb.press("ALT", "y");
+	delay(2000);
 	badusb.press('ENTER');
 	delay(4000);
 	badusb.println("mkdir $env:USERPROFILE\\AppData\\Local\\Temp ; cd $env:USERPROFILE\\AppData\\Local\\Temp ; Invoke-WebRequest -Uri https://www.clamav.net/downloads/production/clamav-0.105.0.win.x64.zip -OutFile clam.zip ; Expand-Archive -Force clam.zip ; del clam.zip ; cd clam\\* ; mv .\\conf_examples\\freshclam.conf.sample freshclam.conf ; mv .\\conf_examples\\clamd.conf.sample clamd.conf ; Set-Content -Path \"freshclam.conf\" -Value (get-content -Path \"freshclam.conf\" | Select-String -Pattern 'Example' -NotMatch) ; Set-Content -Path \"clamd.conf\" -Value (get-content -Path \"clamd.conf\" | Select-String -Pattern 'Example' -NotMatch) ; Start-Process -Wait .\\freshclam.exe ; Start-Process -NoNewWindow -Wait .\\clamscan.exe \"--memory --kill\" ; cd $env:USERPROFILE\\AppData\\Local\\Temp ; rmdir -R clam");
