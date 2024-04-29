@@ -12,7 +12,7 @@ print("Checking for Image...");
 if (storage.exists(image)) {
     print("Storage Exists.");
 } else {
-    print("Please create the Lazagne.img and place the " + binary + " in that storage...");
+    print("Please create the Update.img and place the " + binary + " in that storage...");
     exit;
 }
 // HID as VID/PID and keep connected
